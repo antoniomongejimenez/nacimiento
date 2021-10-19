@@ -4,49 +4,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nacimiento</title>
+    <title>Fechas</title>
 </head>
 <body>
-  <?php require 'auxiliar.php'; ?>
-  <?php $error = [];
+    <?php
+    require 'auxiliar.php';
 
-        $nombre = filtrar_nombre_y_apellido('nombre', $error);
-        $apellidos = filtrar_nombre_y_apellido('apellidos', $error);
-        $fecha_nac = filtrar_fecha('fecha_nac', $error)
-        ?>
+    $error = [];
 
-  <h1>Nacimiento</h1>
-  <form action="" method="GET">
-        <div>
-          <label for="nombre">Nombre:</label>
-          <input type="text" id="nombre" name="nombre" size="10"
-                 value="<?= $nombre ?>">
-        </div>
-        <div>
-          <label for="apellidos">Apellidos:</label>
-          <input type="text" id="apellidos" name="apellidos" size="10"
-                 value="<?= $apellidos ?>">
-        </div>
+    const PAR = [
+        'nombre' => '',
+        'apellidos' => '',
+        'fecha_nac' => '',
+    ];
 
-        <div>
-          <label for="fecha_nac">Fecha de nacimiento:</label>
-          <input type="date" id="fecha_nac" name="fecha_nac" size="10" 
-                 value="<?= $fecha_nac ?>">
-        </div>
-        <div>
-          <button type="submit">Enviar</button>
-        </div>
-  </form>   
+    $par = comprobar_parametros(PAR, $error);
 
-<?php
-  mostrar_errores($error);
+    if (!primera_vez()) {
+        comprobar_valores($par, $error);
+    }
 
-  if (isset($nombre, $apellidos, $fecha_nac) && empty($error)): ?>
-    <p>La edad es: <?= calcular_edad($fecha_nac) ?></p>
-  <?php endif; 
+    dibujar_formulario($par);
+    mostrar_errores($error);
 
-
-?>
-
+    if (!primera_vez() && empty($error)): ?>
+        <p>La edad es: <?= calcular_edad($par['fecha_nac']) ?></p>
+    <?php
+    endif ?>
 </body>
 </html>
